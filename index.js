@@ -1,5 +1,4 @@
 const express = require('express');
-const initDb = require('./src/db/db');
 
 const productsRoutes = require('./src/routes/productsRoutes');
 
@@ -14,7 +13,6 @@ app.use('/products', productsRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res)=> {
-    initDb();
     const htmlResponse =`
         <html>
             <head>
