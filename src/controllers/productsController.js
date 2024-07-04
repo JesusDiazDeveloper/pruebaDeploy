@@ -1,75 +1,97 @@
 const db = require('../db/db');
+const {getPool} = require('../db/db')
 
-const getAllProducts = (req, res) => {
+const getAllProducts = async (req, res) => {
     const sql = 'SELECT * FROM product';
+    try {
+        // Esperar hasta que el pool esté disponible
+        // const pool = await waitForPool();
+        // const pool = ;
+        // if (!pool) {
+        //     throw new Error('Database connection pool is not available');
+        // }
+        
+        const pool = await getPool();
+        const connection = await pool.getConnection();
+        const [result] = await connection.query(sql);
+        res.send(result);
 
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error getting products');
-        } else {
-            res.send(result);
-        }
-    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error getting products');
+    }
 }
 
-const getProductById = (req, res) => {
+const getProductById = async (req, res) => {
     const { id } = req.params;
     const sql = 'SELECT * FROM product WHERE id_product = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) throw err;
+
+    try {
+        const [result] = await pool.query(sql, [id]);
         res.json(result);
-    })
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Error getting product');
+    }
 }
 
-const createProduct = (req, res) => {
-    console.log("Creating Product...");
+const createProduct = async (req, res) => {
     const { img, name, price, stock, category } = req.body;
+    const sql = 'INSERT INTO product (img, name, price, stock, id_category) VALUES (?, ?, ?, ?, ?)';
 
-    const sql = 'INSERT INTO product (img, name, price, stock, id_category) VALUES (?,?,?, ?, ?)';
-    db.query(sql, [img, name, price, stock, category], (err, result) => {
-        if (err) throw err;
-        res.json(
-            {
-                message: 'Product created',
-                productId: result.insertId
-            });
-    })
+    try {
+        const [result] = await pool.query(sql, [img, name, price, stock, category]);
+        res.json({
+            message: 'Product created',
+            productId: result.insertId
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Error creating product');
+    }
 }
 
-
-const updateProduct = (req, res) => {
-    console.log("Updating Product...");
+const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { img, name, price, stock, id_category } = req.body;
-    console.log(req.params);
     const sql = 'UPDATE product SET img = ?, name = ?, price = ?, stock = ?, id_category = ? WHERE id_product = ?';
-    db.query(sql, [img, name, price, stock, id_category, id], (err, result) => {
-        if (err) throw err;
-        res.json({
-            message: 'Product updated'
-        });
-    })
+
+    try {
+        await pool.query(sql, [img, name, price, stock, id_category, id]);
+        res.json({ message: 'Product updated' });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Error updating product');
+    }
 }
 
-
-const deleteProduct = (req, res) => {
+const deleteProduct = async (req, res) => {
     const { id } = req.params;
     const sql = 'DELETE FROM product WHERE id_product = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) throw err;
-        res.json({
-            message: 'Product deleted'
-        });
-    })
+
+    try {
+        await pool.query(sql, [id]);
+        res.json({ message: 'Product deleted' });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Error deleting product');
+    }
 }
 
+// Función para esperar a que el pool esté disponible
+const waitForPool = async () => {
+    while (!db.pool) {
+        await new Promise(resolve => setTimeout(resolve, 100)); // Espera 100ms
+    }
+    return db.pool;
+}
+
+module.exports = { getAllProducts };
 
 
-// Exporta la función
+
 module.exports = {
     getAllProducts,
-    // Agrega las demás funciones aquí si las tienes definidas
     getProductById,
     createProduct,
     updateProduct,

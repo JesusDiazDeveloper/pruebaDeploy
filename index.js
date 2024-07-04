@@ -1,6 +1,9 @@
 const express = require('express');
+const initDb = require('./src/db/db');
 
 const productsRoutes = require('./src/routes/productsRoutes');
+
+require('./src/db/db.js'); // Importar el archivo de inicialización de la base de datos
 
 const app = express();
 
@@ -11,6 +14,7 @@ app.use('/products', productsRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res)=> {
+    initDb();
     const htmlResponse =`
         <html>
             <head>
