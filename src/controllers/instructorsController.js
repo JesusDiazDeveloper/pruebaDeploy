@@ -1,5 +1,8 @@
 const db = require('../db/db');
 
+// const dotenv = require('dotenv');
+// dotenv.config(); // Cargar las variables de entorno
+
 const getAllInstructors = (req, res) => {
     const sql = 'SELECT * FROM Instructor';
 

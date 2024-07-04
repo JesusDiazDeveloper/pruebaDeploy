@@ -2,7 +2,7 @@ const express = require('express');
 
 const productsRoutes = require('./src/routes/productsRoutes');
 
-require('./src/db/db.js'); // Importar el archivo de inicialización de la base de datos
+
 
 const app = express();
 

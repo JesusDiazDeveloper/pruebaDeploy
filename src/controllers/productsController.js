@@ -1,26 +1,22 @@
-const pool = require ('../db/db');
-const dotenv = require('dotenv').config();
+const pool = require('../db/db');
 
 const getAllProducts = async (req, res) => {
-    const sql = 'SELECT * FROM product';
+    const sql = 'SELECT * FROM Product';
 
-    try{
+    try {
         const connection = await pool.getConnection();
         const [rows] = await connection.query(sql);
         connection.release();
         res.json(rows);
-
-    }catch(err){
-        console.log("error getting products");
-        res.send(500).send(err);
+    } catch (err) {
+        console.log("error getting products:", err);
+        res.sendStatus(500);
     }
-
-}
-
+};
 
 const getProductById = async (req, res) => {
     const { id } = req.params;
-    const sql = 'SELECT * FROM product WHERE id_product = ?';
+    const sql = 'SELECT * FROM Product WHERE id_product = ?';
 
     try {
         const connection = await pool.getConnection();
@@ -29,24 +25,9 @@ const getProductById = async (req, res) => {
         res.json(result);
     } catch (err) {
         console.log("Error getting product by ID:", err);
-        res.status(500).send(err);
+        res.sendStatus(500);
     }
-}
-
-// const createProduct = (req, res) => {
-//     console.log("Creating Product...");
-//     const { img, name, price, stock, category } = req.body;
-
-//     const sql = 'INSERT INTO product (img, name, price, stock, id_category) VALUES (?,?,?, ?, ?)';
-//     db.query(sql, [img, name, price, stock, category], (err, result) => {
-//         if (err) throw err;
-//         res.json(
-//             {
-//                 message: 'Product created',
-//                 productId: result.insertId
-//             });
-//     })
-// }
+};
 
 const createProduct = async (req, res) => {
     console.log("Creating Product...");
@@ -63,9 +44,9 @@ const createProduct = async (req, res) => {
         });
     } catch (err) {
         console.log("Error creating product:", err);
-        res.status(500).send(err);
+        res.sendStatus(500);
     }
-}
+};
 
 const updateProduct = async (req, res) => {
     console.log("Updating Product...");
@@ -82,9 +63,9 @@ const updateProduct = async (req, res) => {
         });
     } catch (err) {
         console.log("Error updating product:", err);
-        res.status(500).send(err);
+        res.sendStatus(500);
     }
-}
+};
 
 const deleteProduct = async (req, res) => {
     const { id } = req.params;
@@ -99,16 +80,13 @@ const deleteProduct = async (req, res) => {
         });
     } catch (err) {
         console.log("Error deleting product:", err);
-        res.status(500).send(err);
+        res.sendStatus(500);
     }
-}
-
-
+};
 
 // Exporta la función
 module.exports = {
     getAllProducts,
-    // Agrega las demás funciones aquí si las tienes definidas
     getProductById,
     createProduct,
     updateProduct,

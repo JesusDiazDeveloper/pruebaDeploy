@@ -3,6 +3,9 @@ const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
 
+const dotenv = require('dotenv');
+dotenv.config(); // Cargar las variables de entorno
+
 const pool = mysql.createPool({
     host: process.env.MYSQL_ADDON_HOST,
     user: process.env.MYSQL_ADDON_USER,
