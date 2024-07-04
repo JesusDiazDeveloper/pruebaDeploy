@@ -41,10 +41,10 @@ const initDB = async () => {
 
 const createPool = () => {
     return mysql.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'atlas_gym',
+        host: process.env.MYSQL_ADDON_HOST,
+        user: process.env.MYSQL_ADDON_USER,
+        password: process.env.MYSQL_ADDON_PASSWORD,
+        database: process.env.MYSQL_ADDON_DB,
         connectionLimit: 10,
     });
 };
@@ -53,7 +53,7 @@ let pool;
 
 const startApp = async () => {
     try {
-        await initDB();
+        // await initDB();
         pool = await createPool();
         const conn = await pool.getConnection();
         console.log('Connected to the database');

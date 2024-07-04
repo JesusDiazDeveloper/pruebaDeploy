@@ -15,16 +15,15 @@ INSERT INTO Student (name, last_name, DNI, phone) VALUES
 INSERT INTO Category (name) VALUES ('Cardio'), ('Pesas'), ('Yoga');
 
 INSERT INTO Product (img, name, price, stock, id_category) VALUES
-('img1.jpg', 'Smartphone', 699.99, 50, 1),
-('img2.jpg', 'Laptop', 999.99, 30, 1),
-('img3.jpg', 'E-book', 9.99, 200, 2),
-('img4.jpg', 'T-shirt', 19.99, 150, 3),
-('img5.jpg', 'Action Figure', 14.99, 100, 1),
-('img6.jpg', 'Basketball', 29.99, 80, 1),
-('img7.jpg', 'Shampoo', 7.99, 120, 2),
-('img8.jpg', 'Car Tire', 89.99, 40, 2),
-('img9.jpg', 'Sofa', 499.99, 20, 3),
-('img10.jpg', 'Guitar', 199.99, 3 , 1 );
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/remera_blanca.png?raw=true', 'Remera + Gorra (Blanco)', 30000, 100, 1),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/remera_roja.png?raw=true', 'Remera + Gorra (Rojo)', 64, 100, 1),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/remera_negra.png?raw=true', 'Remera + Gorra (Negro)', 96, 100, 1),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/remera_violeta.png?raw=true', 'Remera + Gorra (Violeta)', 22, 100, 1),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/guantes_rosa.png?raw=true', 'Guantes Rosas', 15000, 100, 2),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/vaso_blanco.png?raw=true', 'Vaso Everlast (Blanco)', 10000, 100, 3),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/vaso_negro.png?raw=true', 'Vaso Everlast (Negro)', 10000, 100, 3),
+('https://github.com/JesusDiazDeveloper/AtlasGym/blob/main/assets/products/vaso_rosa.png?raw=true', 'Vaso Everlast (Blanco)', 10000, 100, 3);
+
 
 INSERT INTO Instructor (name, last_name, phone) VALUES ('Juan', 'García', 123456789), ('María', 'López', 987654321), ('Carlos', 'Martínez', 555444333);
 
