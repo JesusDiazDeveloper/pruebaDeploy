@@ -32,7 +32,7 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     console.log("Creating Product...");
     const { img, name, price, stock, category } = req.body;
-    const sql = 'INSERT INTO product (img, name, price, stock, id_category) VALUES (?,?,?,?,?)';
+    const sql = 'INSERT INTO Product (img, name, price, stock, id_category) VALUES (?,?,?,?,?)';
 
     try {
         const connection = await pool.getConnection();
@@ -52,7 +52,7 @@ const updateProduct = async (req, res) => {
     console.log("Updating Product...");
     const { id } = req.params;
     const { img, name, price, stock, id_category } = req.body;
-    const sql = 'UPDATE product SET img = ?, name = ?, price = ?, stock = ?, id_category = ? WHERE id_product = ?';
+    const sql = 'UPDATE Product SET img = ?, name = ?, price = ?, stock = ?, id_category = ? WHERE id_product = ?';
 
     try {
         const connection = await pool.getConnection();
@@ -69,7 +69,7 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     const { id } = req.params;
-    const sql = 'DELETE FROM product WHERE id_product = ?';
+    const sql = 'DELETE FROM Product WHERE id_product = ?';
 
     try {
         const connection = await pool.getConnection();

@@ -1,78 +1,92 @@
-const db = require('../db/db');
+const pool = require('../db/db'); 
 
-// const dotenv = require('dotenv');
-// dotenv.config(); // Cargar las variables de entorno
-
-const getAllInstructors = (req, res) => {
+const getAllInstructors = async (req, res) => {
     const sql = 'SELECT * FROM Instructor';
-
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error getting Instructors');
-        } else {
-            res.send(result);
-        }
-    });
+    console.log("------------------------HOLA -----------------");
+    try {
+        const connection = await pool.getConnection();
+        const [rows] = await connection.query(sql);
+        connection.release();
+        res.json(rows);
+    } catch (err) {
+        console.log("Error getting instructors:", err);
+        res.sendStatus(500);
+    }
 }
 
-const getInstructorById = (req, res) => {
+const getInstructorById = async (req, res) => {
     const { id } = req.params;
     const sql = 'SELECT * FROM Instructor WHERE id_Instructor = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) throw err;
-        res.json(result);
-    })
+
+    try {
+        const connection = await pool.getConnection();
+        const [rows] = await connection.query(sql, [id]);
+        connection.release();
+        res.json(rows);
+    } catch (err) {
+        console.log("Error getting instructor by ID:", err);
+        res.sendStatus(500);
+    }
 }
 
-const createInstructor = (req, res) => {
+const createInstructor = async (req, res) => {
     console.log("Creating Instructor...");
-    const { name,last_name, phone } = req.body;
+    const { name, last_name, phone } = req.body;
+    const sql = 'INSERT INTO Instructor (name, last_name, phone) VALUES (?, ?, ?)';
 
-    const sql = 'INSERT INTO Instructor (name,last_name,phone) VALUES (?,?,? )';
-    db.query(sql, [name, last_name, phone], (err, result) => {
-        if (err) throw err;
-        res.json(
-            {
-                message: 'Instructor created',
-                InstructorId: result.insertId
-            });
-    })
+    try {
+        const connection = await pool.getConnection();
+        const [result] = await connection.query(sql, [name, last_name, phone]);
+        connection.release();
+        res.json({
+            message: 'Instructor created',
+            InstructorId: result.insertId
+        });
+    } catch (err) {
+        console.log("Error creating instructor:", err);
+        res.sendStatus(500);
+    }
 }
 
-
-const updateInstructor = (req, res) => {
+const updateInstructor = async (req, res) => {
     console.log("Updating Instructor...");
     const { id } = req.params;
-    const { name,lastName,phone } = req.body;
-    console.log(req.params);
-    const sql = 'UPDATE Instructor SET  name = ?, last_name = ?, phone = ? WHERE id_Instructor = ?';
-    db.query(sql, [ name, lastName, phone,  id], (err, result) => {
-        if (err) throw err;
+    const { name, lastName, phone } = req.body;
+    const sql = 'UPDATE Instructor SET name = ?, last_name = ?, phone = ? WHERE id_Instructor = ?';
+
+    try {
+        const connection = await pool.getConnection();
+        const [result] = await connection.query(sql, [name, lastName, phone, id]);
+        connection.release();
         res.json({
             message: 'Instructor updated'
         });
-    })
+    } catch (err) {
+        console.log("Error updating instructor:", err);
+        res.sendStatus(500);
+    }
 }
 
-
-const deleteInstructor = (req, res) => {
+const deleteInstructor = async (req, res) => {
     const { id } = req.params;
     const sql = 'DELETE FROM Instructor WHERE id_Instructor = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) throw err;
+
+    try {
+        const connection = await pool.getConnection();
+        const [result] = await connection.query(sql, [id]);
+        connection.release();
         res.json({
             message: 'Instructor deleted'
         });
-    })
+    } catch (err) {
+        console.log("Error deleting instructor:", err);
+        res.sendStatus(500);
+    }
 }
-
-
 
 // Exporta la función
 module.exports = {
     getAllInstructors,
-    // Agrega las demás funciones aquí si las tienes definidas
     getInstructorById,
     createInstructor,
     updateInstructor,
