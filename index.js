@@ -2,14 +2,18 @@ const express = require('express');
 
 const productsRoutes = require('./src/routes/productsRoutes');
 const instructorsRoutes = require('./src/routes/instructorsRoutes');
+const loginRoutes = require('./src/routes/loginRoutes');
 
+const { verifyToken } = require('./src/controllers/loginController');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/products', productsRoutes);
-app.use('/instructors', instructorsRoutes);
+app.use('/products',verifyToken, productsRoutes);
+app.use('/instructors',verifyToken, instructorsRoutes);
+
+app.use('/login', loginRoutes);
 
 const PORT = process.env.PORT || 3000;
 
